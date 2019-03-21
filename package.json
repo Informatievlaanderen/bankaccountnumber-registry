@@ -112,7 +112,7 @@
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "BITBUCKET_BUILD_NUMBER=${nextRelease.version} ./build.sh Pack"
+        "cmd": "BITBUCKET_BUILD_NUMBER=${nextRelease.version} ./build.sh Push"
       },
       {
         "path": "@semantic-release/git",
@@ -132,6 +132,10 @@
             "path": "dist/**/*.nupkg"
           }
         ]
+      },
+      {
+        "path": "@semantic-release/exec",
+        "cmd": "node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/nuget/Be.Vlaanderen.Basisregisters.BankAccountNumberRegistry.Api.${nextRelease.version}.nupkg"
       },
       {
         "path": "@semantic-release/exec",
