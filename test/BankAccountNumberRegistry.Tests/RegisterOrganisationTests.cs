@@ -1,10 +1,10 @@
-namespace Dns.Tests
+namespace BankAccountNumberRegistry.Tests
 {
     using AutoFixture;
     using BankAccountNumberRegistry;
-    using BankAccountNumberRegistry.Organisation.Commands;
-    using BankAccountNumberRegistry.Organisation.Events;
-    using BankAccountNumberRegistry.Tests.Infrastructure;
+    using Organisation.Commands;
+    using Organisation.Events;
+    using Infrastructure;
     using Be.Vlaanderen.Basisregisters.AggregateSource.Testing;
     using SqlStreamStore.Streams;
     using Xunit;

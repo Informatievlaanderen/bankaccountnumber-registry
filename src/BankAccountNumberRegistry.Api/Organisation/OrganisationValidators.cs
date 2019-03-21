@@ -1,7 +1,6 @@
 namespace BankAccountNumberRegistry.Api.Organisation
 {
     using System;
-    using System.Linq;
     using FluentValidation;
 
     public static class OrganisationValidators
@@ -23,7 +22,7 @@ namespace BankAccountNumberRegistry.Api.Organisation
 
         public static IRuleBuilderOptions<T, string> ValidOvoNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
             => ruleBuilder
-                .Must(property => Uri.CheckHostName(property) == UriHostNameType.Dns)
+                .Must(property => property.ToUpperInvariant().StartsWith("OVO")) // TODO: Check if the last chars are digits
                 .WithMessage("{PropertyName} moet een geldig OVO nummer zijn.");
     }
 }
