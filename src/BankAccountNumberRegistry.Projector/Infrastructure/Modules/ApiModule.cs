@@ -13,6 +13,7 @@ namespace BankAccountNumberRegistry.Projector.Infrastructure.Modules
     using Microsoft.Extensions.Logging;
     using BankAccountNumberRegistry.Infrastructure;
     using BankAccountNumberRegistry.Projections.Api;
+    using BankAccountNumberRegistry.Projections.Api.OrganisationList;
 
     public class ApiModule : Module
     {
@@ -70,11 +71,9 @@ namespace BankAccountNumberRegistry.Projector.Infrastructure.Modules
             builder
                 .RegisterProjectionMigrator<ApiProjectionsContextMigrationFactory>(
                     _configuration,
-                    _loggerFactory);
+                    _loggerFactory)
 
-                //.RegisterProjections<DomainDetailProjections, ApiProjectionsContext>()
-                //.RegisterProjections<DomainListProjections, ApiProjectionsContext>()
-                //.RegisterProjections<ServiceDetailProjections, ApiProjectionsContext>();
+                .RegisterProjections<OrganisationListProjections, ApiProjectionsContext>();
         }
     }
 }
