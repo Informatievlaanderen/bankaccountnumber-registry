@@ -5,6 +5,8 @@ namespace BankAccountNumberRegistry
 
     public class OvoNumber : StringValueObject<OvoNumber>
     {
+        public static int MaxLength = "OVO003347".Length;
+
         public OvoNumber([JsonProperty("value")] string ovoNumber) : base(ovoNumber?.Trim()) { }
     }
 }

@@ -19,6 +19,7 @@ namespace BankAccountNumberRegistry.Api.Infrastructure.Responses
             Links = new List<Link>
             {
                 new Link("/organisations", Link.Relations.Organisations, WebRequestMethods.Http.Get),
+                new Link("/organisations", Link.Relations.Organisations, WebRequestMethods.Http.Post),
             };
         }
     }
