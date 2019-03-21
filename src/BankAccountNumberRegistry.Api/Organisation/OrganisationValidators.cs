@@ -22,7 +22,7 @@ namespace BankAccountNumberRegistry.Api.Organisation
 
         public static IRuleBuilderOptions<T, string> ValidOvoNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
             => ruleBuilder
-                .Must(property => property.ToUpperInvariant().StartsWith("OVO")) // TODO: Check if the last chars are digits
+                .Must(property => property != null && property.ToUpperInvariant().StartsWith("OVO")) // TODO: Check if the last chars are digits
                 .WithMessage("{PropertyName} moet een geldig OVO nummer zijn.");
     }
 }
