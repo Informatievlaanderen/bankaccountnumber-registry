@@ -6,25 +6,31 @@ namespace BankAccountNumberRegistry.Organisation.Events
 
     [EventName("OrganisationBankAccountWasUpdated")]
     [EventDescription("A bank account of an organisation was updated.")]
-    public class OrganisationBankAccountUpdated
+    public class OrganisationBankAccountWasUpdated
     {
         public string OvoNumber { get; }
 
         public Guid OrganisationBankAccountId { get; }
+
         public string BankAccountNumber { get; }
         public string PreviousBankAccountNumber { get; }
+
         public string Bic { get; }
         public string PreviousBic { get; }
+
         public bool IsIban { get; }
         public bool WasPreviouslyIban { get; }
+
         public bool IsBic { get; }
         public bool WasPreviouslyBic { get; }
+
         public DateTime? ValidFrom { get; }
         public DateTime? PreviouslyValidFrom { get; }
+
         public DateTime? ValidTo { get; }
         public DateTime? PreviouslyValidTo { get; }
 
-        public OrganisationBankAccountUpdated(
+        public OrganisationBankAccountWasUpdated(
             OvoNumber ovoNumber,
             Guid organisationBankAccountId,
             string bankAccountNumber,
@@ -59,7 +65,7 @@ namespace BankAccountNumberRegistry.Organisation.Events
         }
 
         [JsonConstructor]
-        public OrganisationBankAccountUpdated(
+        public OrganisationBankAccountWasUpdated(
             string ovoNumber,
             Guid organisationBankAccountId,
             string bankAccountNumber,

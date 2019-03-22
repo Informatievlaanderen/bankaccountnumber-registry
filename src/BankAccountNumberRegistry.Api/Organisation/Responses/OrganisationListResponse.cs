@@ -11,7 +11,7 @@ namespace BankAccountNumberRegistry.Api.Organisation.Responses
     public class OrganisationListResponse
     {
         /// <summary>
-        /// All domains.
+        /// Alle organisaties.
         /// </summary>
         [DataMember(Name = "Organisations", Order = 1)]
         public List<OrganisationListItemResponse> Organisations { get; set; }

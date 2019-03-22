@@ -48,7 +48,7 @@ namespace BankAccountNumberRegistry.Api.Organisation
         [SwaggerResponseExample(StatusCodes.Status202Accepted, typeof(EmptyResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ValidationErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
-        public async Task<IActionResult> CreateDomain(
+        public async Task<IActionResult> RegisterOrganisation(
             [FromServices] ICommandHandlerResolver bus,
             [FromCommandId] Guid commandId,
             [FromBody] RegisterOrganisationRequest request,
@@ -81,7 +81,7 @@ namespace BankAccountNumberRegistry.Api.Organisation
         [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status500InternalServerError)]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(OrganisationListResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
-        public async Task<IActionResult> ListDomains(
+        public async Task<IActionResult> ListOrganisations(
             [FromServices] ApiProjectionsContext context,
             CancellationToken cancellationToken = default)
         {
@@ -100,6 +100,42 @@ namespace BankAccountNumberRegistry.Api.Organisation
                     Organisations = await pagedOrganisations
                         .Items
                         .Select(x => new OrganisationListItemResponse(x))
+                        .ToListAsync(cancellationToken)
+                });
+        }
+
+        /// <summary>
+        /// Vraag een lijst met bankrekeningnummers van een organisatie op.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="200">Als de opvraging van een lijst met bankrekeningnummers van een organisatie gelukt is.</response>
+        /// <response code="500">Als er een interne fout is opgetreden.</response>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(OrganisationBankAccountNumberListResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(OrganisationBankAccountNumberListResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        public async Task<IActionResult> ListOrganisationBankAccountNumbers(
+            [FromServices] ApiProjectionsContext context,
+            CancellationToken cancellationToken = default)
+        {
+            var filtering = Request.ExtractFilteringRequest<OrganisationBankAccountNumberFilter>();
+            var sorting = Request.ExtractSortingRequest();
+            var pagination = Request.ExtractPaginationRequest();
+
+            var pagedOrganisationBankAccountNumbers = new OrganisationBankAccountNumberListQuery(context)
+                .Fetch(filtering, sorting, pagination);
+
+            Response.AddPagedQueryResultHeaders(pagedOrganisationBankAccountNumbers);
+
+            return Ok(
+                new OrganisationBankAccountNumberListResponse
+                {
+                    OrganisationBankAccountNumbers = await pagedOrganisationBankAccountNumbers
+                        .Items
+                        .Select(x => new OrganisationBankAccountNumberListItemResponse(x))
                         .ToListAsync(cancellationToken)
                 });
         }

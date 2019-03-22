@@ -5,7 +5,7 @@ namespace BankAccountNumberRegistry.Projections.Api.OrganisationList
     using System.Threading.Tasks;
     using Be.Vlaanderen.Basisregisters.ProjectionHandling.Connector;
 
-    public static class DomainListExtensions
+    public static class OrganisationListExtensions
     {
         public static async Task<OrganisationList> FindAndUpdateOrganisationList(
             this ApiProjectionsContext context,

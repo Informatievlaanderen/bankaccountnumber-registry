@@ -9,6 +9,7 @@ namespace BankAccountNumberRegistry.Projections.Api
         public override string ProjectionStateSchema => Schema.Api;
 
         public DbSet<OrganisationList.OrganisationList> OrganisationList { get; set; }
+        public DbSet<OrganisationBankAccountNumberList.OrganisationBankAccountNumberList> OrganisationBankAccountNumberList { get; set; }
 
         // This needs to be here to please EF
         public ApiProjectionsContext() { }
