@@ -11,7 +11,6 @@ namespace BankAccountNumberRegistry.Api.Organisation
     using Be.Vlaanderen.Basisregisters.Api.Search.Pagination;
     using Be.Vlaanderen.Basisregisters.Api.Search.Sorting;
     using Be.Vlaanderen.Basisregisters.CommandHandling;
-    using Infrastructure;
     using Infrastructure.Responses;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -23,14 +22,10 @@ namespace BankAccountNumberRegistry.Api.Organisation
     using Responses;
     using Swashbuckle.AspNetCore.Filters;
 
-    [ApiVersion("1.0")]
-    [AdvertiseApiVersions("1.0")]
-    [ApiRoute("organisations")]
-    [ApiExplorerSettings(GroupName = "Organisaties")]
-    public partial class OrganisationController : BankAccountNumberRegistryController
+    public partial class OrganisationController
     {
         /// <summary>
-        /// Registreer een organisatie.
+        /// Voeg een bankrekeningnummer toe aan een organisatie.
         /// </summary>
         /// <param name="bus"></param>
         /// <param name="commandId">Optionele unieke id voor het verzoek.</param>
@@ -40,27 +35,27 @@ namespace BankAccountNumberRegistry.Api.Organisation
         /// <response code="400">Als het verzoek ongeldige data bevat.</response>
         /// <response code="500">Als er een interne fout is opgetreden.</response>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("{ovoNumber}/bankaccountnumbers")]
         [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
         [ProducesResponseType(typeof(BasicApiValidationProblem), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status500InternalServerError)]
-        [SwaggerRequestExample(typeof(RegisterOrganisationRequest), typeof(RegisterOrganisationRequestExample))]
+        [SwaggerRequestExample(typeof(AddOrganisationBankAccountRequest), typeof(AddOrganisationBankAccountRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status202Accepted, typeof(EmptyResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ValidationErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         public async Task<IActionResult> RegisterOrganisation(
             [FromServices] ICommandHandlerResolver bus,
             [FromCommandId] Guid commandId,
-            [FromBody] RegisterOrganisationRequest request,
+            [FromBody] AddOrganisationBankAccountRequest request,
             CancellationToken cancellationToken = default)
         {
-            await new RegisterOrganisationRequestValidator()
+            await new AddOrganisationBankAccountRequestValidator()
                 .ValidateAndThrowAsync(request, cancellationToken: cancellationToken);
 
-            var command = RegisterOrganisationRequestMapping.Map(request);
+            var command = AddOrganisationBankAccountRequestMapping.Map(request);
 
             return Accepted(
-                $"/v1/organisations/{command.OvoNumber}",
+                $"/v1/organisations/{command.OvoNumber}/bankaccountnumbers/{command}", // TODO: Add correct bank id
                 await bus.Dispatch(
                     commandId,
                     command,
@@ -69,37 +64,39 @@ namespace BankAccountNumberRegistry.Api.Organisation
         }
 
         /// <summary>
-        /// Vraag een lijst met organisaties op.
+        /// Vraag een lijst met bankrekeningnummers van een organisatie op.
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="ovoNumber">OVO nummer van de organisatie.</param>
         /// <param name="cancellationToken"></param>
-        /// <response code="200">Als de opvraging van een lijst met organisaties gelukt is.</response>
+        /// <response code="200">Als de opvraging van een lijst met bankrekeningnummers van een organisatie gelukt is.</response>
         /// <response code="500">Als er een interne fout is opgetreden.</response>
         /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(OrganisationListResponse), StatusCodes.Status200OK)]
+        [HttpGet("{ovoNumber}/bankaccountnumbers")]
+        [ProducesResponseType(typeof(OrganisationBankAccountNumberListResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status500InternalServerError)]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(OrganisationListResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(OrganisationBankAccountNumberListResponseExamples), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
-        public async Task<IActionResult> ListOrganisations(
+        public async Task<IActionResult> ListOrganisationBankAccountNumbers(
             [FromServices] ApiProjectionsContext context,
+            [FromRoute] string ovoNumber,
             CancellationToken cancellationToken = default)
         {
-            var filtering = Request.ExtractFilteringRequest<OrganisationFilter>();
+            var filtering = Request.ExtractFilteringRequest<OrganisationBankAccountNumberFilter>();
             var sorting = Request.ExtractSortingRequest();
             var pagination = Request.ExtractPaginationRequest();
 
-            var pagedOrganisations = new OrganisationListQuery(context)
+            var pagedOrganisationBankAccountNumbers = new OrganisationBankAccountNumberListQuery(context)
                 .Fetch(filtering, sorting, pagination);
 
-            Response.AddPagedQueryResultHeaders(pagedOrganisations);
+            Response.AddPagedQueryResultHeaders(pagedOrganisationBankAccountNumbers);
 
             return Ok(
-                new OrganisationListResponse
+                new OrganisationBankAccountNumberListResponse
                 {
-                    Organisations = await pagedOrganisations
+                    OrganisationBankAccountNumbers = await pagedOrganisationBankAccountNumbers
                         .Items
-                        .Select(x => new OrganisationListItemResponse(x))
+                        .Select(x => new OrganisationBankAccountNumberListItemResponse(x))
                         .ToListAsync(cancellationToken)
                 });
         }

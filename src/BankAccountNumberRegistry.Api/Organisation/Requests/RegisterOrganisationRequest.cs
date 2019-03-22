@@ -7,7 +7,7 @@ namespace BankAccountNumberRegistry.Api.Organisation.Requests
 
     public class RegisterOrganisationRequest
     {
-        /// <summary>OVO Nummer van de te registreren organiatie.</summary>
+        /// <summary>OVO Nummer van de te registreren organisatie.</summary>
         [Required]
         [Display(Name = "OVO Nummer")]
         public string OvoNumber { get; set; }

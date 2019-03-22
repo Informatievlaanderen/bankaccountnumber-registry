@@ -2,6 +2,7 @@ namespace BankAccountNumberRegistry.Organisation
 {
     using Be.Vlaanderen.Basisregisters.AggregateSource;
     using System;
+    using BankAccountNumber;
     using Events;
 
     public partial class Organisation : AggregateRootEntity
@@ -13,6 +14,15 @@ namespace BankAccountNumberRegistry.Organisation
             var organisation = Factory();
             organisation.ApplyChange(new OrganisationWasRegistered(ovoNumber));
             return organisation;
+        }
+
+        public void AddBankAccountNumber(BankAccountNumber bankAccountNumber)
+        {
+
+            //ApplyChange(
+            //    new OrganisationBankAccountWasAdded(
+            //        _ovoNumber,
+            //        ...));
         }
     }
 }
