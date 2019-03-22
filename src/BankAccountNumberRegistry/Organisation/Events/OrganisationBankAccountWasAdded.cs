@@ -4,11 +4,12 @@ namespace BankAccountNumberRegistry.Organisation.Events
     using Be.Vlaanderen.Basisregisters.EventHandling;
     using Newtonsoft.Json;
 
-    [EventName("OrganisationBankAccountAdded")]
-    [EventDescription("OrganisationBankAccountAdded")]
-    public class OrganisationBankAccountAdded : BaseEvent<OrganisationBankAccountAdded>
+    [EventName("OrganisationBankAccountWasAdded")]
+    [EventDescription("A bank account was added to the organisation.")]
+    public class OrganisationBankAccountWasAdded
     {
-        public Guid OrganisationId => Id;
+        public string OvoNumber { get; }
+
         public Guid OrganisationBankAccountId { get; }
         public string BankAccountNumber { get; }
         public bool IsIban { get; }
@@ -17,9 +18,8 @@ namespace BankAccountNumberRegistry.Organisation.Events
         public DateTime? ValidFrom { get; }
         public DateTime? ValidTo { get; }
 
-        [JsonConstructor]
-        public OrganisationBankAccountAdded(
-            Guid organisationId,
+        public OrganisationBankAccountWasAdded(
+            OvoNumber ovoNumber,
             Guid organisationBankAccountId,
             string bankAccountNumber,
             bool isIban,
@@ -28,7 +28,7 @@ namespace BankAccountNumberRegistry.Organisation.Events
             DateTime? validFrom,
             DateTime? validTo)
         {
-            Id = organisationId;
+            OvoNumber = ovoNumber;
             OrganisationBankAccountId = organisationBankAccountId;
             BankAccountNumber = bankAccountNumber;
             IsIban = isIban;
@@ -37,5 +37,25 @@ namespace BankAccountNumberRegistry.Organisation.Events
             ValidFrom = validFrom;
             ValidTo = validTo;
         }
+
+        [JsonConstructor]
+        public OrganisationBankAccountWasAdded(
+            string ovoNumber,
+            Guid organisationBankAccountId,
+            string bankAccountNumber,
+            bool isIban,
+            string bic,
+            bool isBic,
+            DateTime? validFrom,
+            DateTime? validTo)
+            : this(
+                new OvoNumber(ovoNumber),
+                organisationBankAccountId,
+                bankAccountNumber,
+                isIban,
+                bic,
+                isBic,
+                validFrom,
+                validTo) { }
     }
 }

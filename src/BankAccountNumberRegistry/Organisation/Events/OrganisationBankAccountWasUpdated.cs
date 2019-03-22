@@ -4,11 +4,12 @@ namespace BankAccountNumberRegistry.Organisation.Events
     using Be.Vlaanderen.Basisregisters.EventHandling;
     using Newtonsoft.Json;
 
-    [EventName("OrganisationBankAccountUpdated")]
-    [EventDescription("OrganisationBankAccountUpdated")]
-    public class OrganisationBankAccountUpdated : BaseEvent<OrganisationBankAccountUpdated>
+    [EventName("OrganisationBankAccountWasUpdated")]
+    [EventDescription("A bank account of an organisation was updated.")]
+    public class OrganisationBankAccountUpdated
     {
-        public Guid OrganisationId => Id;
+        public string OvoNumber { get; }
+
         public Guid OrganisationBankAccountId { get; }
         public string BankAccountNumber { get; }
         public string PreviousBankAccountNumber { get; }
@@ -23,9 +24,8 @@ namespace BankAccountNumberRegistry.Organisation.Events
         public DateTime? ValidTo { get; }
         public DateTime? PreviouslyValidTo { get; }
 
-        [JsonConstructor]
         public OrganisationBankAccountUpdated(
-            Guid organisationId,
+            OvoNumber ovoNumber,
             Guid organisationBankAccountId,
             string bankAccountNumber,
             bool isIban,
@@ -38,9 +38,10 @@ namespace BankAccountNumberRegistry.Organisation.Events
             bool wasPreviouslyIban,
             string previousBic,
             bool wasPreviouslyBic,
-            DateTime? previouslyValidFrom, DateTime? previouslyValidTo)
+            DateTime? previouslyValidFrom,
+            DateTime? previouslyValidTo)
         {
-            Id = organisationId;
+            OvoNumber = ovoNumber;
             OrganisationBankAccountId = organisationBankAccountId;
             BankAccountNumber = bankAccountNumber;
             IsIban = isIban;
@@ -56,5 +57,38 @@ namespace BankAccountNumberRegistry.Organisation.Events
             PreviouslyValidFrom = previouslyValidFrom;
             PreviouslyValidTo = previouslyValidTo;
         }
+
+        [JsonConstructor]
+        public OrganisationBankAccountUpdated(
+            string ovoNumber,
+            Guid organisationBankAccountId,
+            string bankAccountNumber,
+            bool isIban,
+            string bic,
+            bool isBic,
+
+            DateTime? validFrom,
+            DateTime? validTo,
+            string previousBankAccountNumber,
+            bool wasPreviouslyIban,
+            string previousBic,
+            bool wasPreviouslyBic,
+            DateTime? previouslyValidFrom,
+            DateTime? previouslyValidTo)
+            : this(
+                new OvoNumber(ovoNumber),
+                organisationBankAccountId,
+                bankAccountNumber,
+                isIban,
+                bic,
+                isBic,
+                validFrom,
+                validTo,
+                previousBankAccountNumber,
+                wasPreviouslyIban,
+                previousBic,
+                wasPreviouslyBic,
+                previouslyValidFrom,
+                previouslyValidTo) { }
     }
 }

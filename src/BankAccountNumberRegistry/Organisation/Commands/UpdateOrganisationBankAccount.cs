@@ -2,9 +2,9 @@ namespace BankAccountNumberRegistry.Organisation.Commands
 {
     using System;
 
-    public class UpdateOrganisationBankAccount : BaseCommand<OrganisationId>
+    public class UpdateOrganisationBankAccount
     {
-        public OrganisationId OrganisationId => Id;
+        public OvoNumber OvoNumber { get; }
 
         public Guid OrganisationBankAccountId { get; }
         public string BankAccountNumber { get; }
@@ -16,7 +16,7 @@ namespace BankAccountNumberRegistry.Organisation.Commands
 
         public UpdateOrganisationBankAccount(
             Guid organisationBankAccountId,
-            OrganisationId organisationId,
+            OvoNumber ovoNumber,
             string bankAccountNumber,
             bool isIban,
             string bic,
@@ -24,7 +24,7 @@ namespace BankAccountNumberRegistry.Organisation.Commands
             ValidFrom validFrom,
             ValidTo validTo)
         {
-            Id = organisationId;
+            OvoNumber = ovoNumber;
 
             OrganisationBankAccountId = organisationBankAccountId;
             BankAccountNumber = bankAccountNumber;
