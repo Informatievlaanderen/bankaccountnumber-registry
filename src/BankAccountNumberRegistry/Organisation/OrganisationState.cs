@@ -1,19 +1,22 @@
 namespace BankAccountNumberRegistry.Organisation
 {
     using System.Collections.Generic;
-    using BankAccountNumber;
+    using System.Linq;
+    using BankAccount;
+    using BankAccount.Events;
     using Events;
 
     public partial class Organisation
     {
         private OvoNumber _ovoNumber;
 
-        private readonly List<BankAccountNumber> _bankAccountNumbers = new List<BankAccountNumber>();
+        private readonly List<BankAccount> _bankAccounts = new List<BankAccount>();
 
         private Organisation()
         {
             Register<OrganisationWasRegistered>(When);
             Register<OrganisationBankAccountWasAdded>(When);
+            Register<BankAccountWasLinkedToPublicService>(When);
         }
 
         private void When(OrganisationWasRegistered @event)
@@ -23,8 +26,14 @@ namespace BankAccountNumberRegistry.Organisation
 
         private void When(OrganisationBankAccountWasAdded @event)
         {
-            //_bankAccountNumbers.Add(
-            //    new BankAccountNumber());
+            //_bankAccounts.Add(
+            //    new BankAccountNumber(ApplyChange));
+        }
+
+        private void When(BankAccountWasLinkedToPublicService @event)
+        {
+            //var bankAccount = _bankAccounts.First(x => x.)
+            //bankAccount.Route(@event);
         }
     }
 }

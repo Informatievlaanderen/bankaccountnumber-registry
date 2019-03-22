@@ -1,4 +1,4 @@
-namespace BankAccountNumberRegistry.Organisation
+namespace BankAccountNumberRegistry.BankAccount
 {
     using System;
     using Exceptions;

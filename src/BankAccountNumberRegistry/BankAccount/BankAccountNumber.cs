@@ -1,20 +1,18 @@
-namespace BankAccountNumberRegistry.BankAccountNumber
+namespace BankAccountNumberRegistry.BankAccount
 {
     using System;
     using System.Text.RegularExpressions;
-    using Be.Vlaanderen.Basisregisters.AggregateSource;
     using Exceptions;
     using IbanBic;
 
-    public class BankAccountNumber : Entity
+    public class BankAccountNumber
     {
         public string Number { get; }
         public bool IsValidIban { get; }
 
         public BankAccountNumber(
-            Action<object> applyChange,
             string bankAccountNumber,
-            bool isValidIban) : base(applyChange)
+            bool isValidIban)
         {
             IsValidIban = isValidIban;
             Number = isValidIban ? CleanBankAccountNumber(bankAccountNumber) : bankAccountNumber;

@@ -2,7 +2,7 @@ namespace BankAccountNumberRegistry.Organisation
 {
     using Be.Vlaanderen.Basisregisters.AggregateSource;
     using System;
-    using BankAccountNumber;
+    using BankAccount;
     using Events;
 
     public partial class Organisation : AggregateRootEntity
