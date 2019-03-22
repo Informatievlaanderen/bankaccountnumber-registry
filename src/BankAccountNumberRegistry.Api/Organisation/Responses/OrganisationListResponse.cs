@@ -38,7 +38,7 @@ namespace BankAccountNumberRegistry.Api.Organisation.Responses
         /// <summary>
         /// OVO nummer van de organisatie
         /// </summary>
-        [DataMember(Name = "OvoNummer", Order = 1)]
+        [DataMember(Name = "OvoNumber", Order = 1)]
         public string OvoNumber { get; set; }
 
         /// <summary>

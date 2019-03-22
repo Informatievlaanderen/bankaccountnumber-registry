@@ -14,7 +14,7 @@ namespace BankAccountNumberRegistry.Api.Infrastructure
     public class HomeController : ApiController
     {
         /// <summary>
-        /// Initial entry point of the API.
+        /// Initieel startpunt van de API.
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(HomeResponse), StatusCodes.Status200OK)]

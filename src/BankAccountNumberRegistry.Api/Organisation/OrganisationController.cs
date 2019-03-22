@@ -18,6 +18,7 @@ namespace BankAccountNumberRegistry.Api.Organisation
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json.Converters;
     using Projections.Api;
+    using Projections.Api.OrganisationDetail;
     using Query;
     using Requests;
     using Responses;
@@ -102,6 +103,60 @@ namespace BankAccountNumberRegistry.Api.Organisation
                         .Select(x => new OrganisationListItemResponse(x))
                         .ToListAsync(cancellationToken)
                 });
+        }
+
+        /// <summary>
+        /// Vraag een organisatie op.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="ovoNumber">OVO nummer van de organisatie.</param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="200">Als de organisatie gevonden is.</response>
+        /// <response code="400">Als het verzoek ongeldige data bevat.</response>
+        /// <response code="404">Als de organisatie niet gevonden kan worden.</response>
+        /// <response code="500">Als er een interne fout is opgetreden.</response>
+        /// <returns></returns>
+        [HttpGet("{ovoNumber}")]
+        [ProducesResponseType(typeof(OrganisationDetailResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BasicApiValidationProblem), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(BasicApiProblem), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(OrganisationResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ValidationErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(OrganisationNotFoundResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(InternalServerErrorResponseExamples), jsonConverter: typeof(StringEnumConverter))]
+        public async Task<IActionResult> DetailDomain(
+            [FromServices] ApiProjectionsContext context,
+            [FromRoute] string ovoNumber,
+            CancellationToken cancellationToken = default)
+        {
+            var request = new DetailOrganisationRequest
+            {
+                OvoNumber = ovoNumber,
+            };
+
+            await new DetailOrganisationRequestValidator()
+                .ValidateAndThrowAsync(request, cancellationToken: cancellationToken);
+
+            var organisation = await FindOrganisationAsync(context, ovoNumber, cancellationToken);
+
+            return Ok(
+                new OrganisationDetailResponse(organisation));
+        }
+
+        private static async Task<OrganisationDetail> FindOrganisationAsync(
+            ApiProjectionsContext context,
+            string ovoNumber,
+            CancellationToken cancellationToken)
+        {
+            var organisation = await context
+                .OrganisationDetails
+                .FindAsync(new object[] { ovoNumber }, cancellationToken);
+
+            if (organisation == null)
+                throw new ApiException(OrganisationNotFoundResponseExamples.Message, StatusCodes.Status404NotFound);
+
+            return organisation;
         }
     }
 }
