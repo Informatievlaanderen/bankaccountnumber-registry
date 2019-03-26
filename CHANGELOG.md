@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/informatievlaanderen/bankaccountnumber-registry/compare/v1.0.1...v1.0.2) (2019-03-26)
+
+
+### Bug Fixes
+
+* add nuget packages for documentation ([73e5cae](https://github.com/informatievlaanderen/bankaccountnumber-registry/commit/73e5cae))
+
 ## [1.0.1](https://github.com/informatievlaanderen/bankaccountnumber-registry/compare/v1.0.0...v1.0.1) (2019-03-26)
 
 # 1.0.0 (2019-03-21)
