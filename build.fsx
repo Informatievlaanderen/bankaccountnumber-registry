@@ -67,6 +67,7 @@ Target "Test_Solution" (fun _ -> test "BankAccountNumberRegistry")
 Target "Publish_Solution" (fun _ ->
   [
     "BankAccountNumberRegistry.Api"
+    "BankAccountNumberRegistry.Projector"
   ] |> List.iter publish)
 
 Target "Pack_Solution" (fun _ ->
