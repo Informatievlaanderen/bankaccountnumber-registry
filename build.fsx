@@ -45,7 +45,7 @@ open ``Build-generic``
 // Push
 // Executes `docker push` to push the built images to the registry.
 
-let dockerRepository = "bankaccountnumber-registry"
+let dockerRepository = "bankaccountnumberregistry"
 let assemblyVersionNumber = (sprintf "2.%s")
 let nugetVersionNumber = (sprintf "%s")
 
