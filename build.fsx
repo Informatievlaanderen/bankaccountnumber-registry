@@ -72,6 +72,7 @@ Target "Publish_Solution" (fun _ ->
 
 Target "Pack_Solution" (fun _ ->
   [
+    "BankAccountNumberRegistry.Api"
   ] |> List.iter pack)
 
 Target "Containerize_Api" (fun _ -> containerize "BankAccountNumberRegistry.Api" "api")
