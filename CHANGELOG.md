@@ -1,3 +1,11 @@
+## [1.0.3](https://github.com/informatievlaanderen/bankaccountnumber-registry/compare/v1.0.2...v1.0.3) (2019-07-17)
+
+
+### Bug Fixes
+
+* do not hardcode logging to console ([35600c7](https://github.com/informatievlaanderen/bankaccountnumber-registry/commit/35600c7))
+* do not hardcode logging to console ([e528f8c](https://github.com/informatievlaanderen/bankaccountnumber-registry/commit/e528f8c))
+
 ## [1.0.2](https://github.com/informatievlaanderen/bankaccountnumber-registry/compare/v1.0.1...v1.0.2) (2019-03-26)
 
 
